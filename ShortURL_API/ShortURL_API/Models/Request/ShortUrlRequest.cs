@@ -12,12 +12,12 @@ public class ShortUrlRequest
         var errors = new List<string>();
         if (string.IsNullOrWhiteSpace(OriginalUrl))
         {
-            errors.Add("Original URL is required.");
+            errors.Add("URL is required.");
         }
         else if (!Uri.IsWellFormedUriString(OriginalUrl, UriKind.Absolute))
         {
-            errors.Add("Original URL is not valid.");
-        }
+            errors.Add("URL is not valid.");
+        }        
 
         return (errors.Count == 0, errors);
     }
