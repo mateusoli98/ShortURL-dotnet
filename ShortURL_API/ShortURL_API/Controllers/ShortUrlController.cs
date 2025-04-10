@@ -52,5 +52,19 @@ public class ShortUrlController : ControllerBase
         var shortUrlFull = $"{baseUrl}/{shortCode}";
 
         return Ok(new { ShortUrl = shortUrlFull });
-    }  
+    }
+
+    [HttpGet("{shortCode}")]
+    public async Task<IActionResult> GetOriginalUrl(string shortCode)
+    {
+        var shortUrl = await _context.ShortUrls.FirstOrDefaultAsync(x => x.ShortCode == shortCode);
+        if (shortUrl == null)
+        {
+            return NotFound(new { Error = "Short URL not found." });
+        }
+        shortUrl.AccessCount++;
+        shortUrl.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return Redirect(shortUrl.OriginalUrl);
+    }
 }
